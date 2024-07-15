@@ -10,7 +10,7 @@ it('should list product')
     'produto B',
 ]);
 
-it('should list product id', function(){
+it('should list all product', function(){
     $product1 = \App\Models\Product::factory()->create();
     $product2 = \App\Models\Product::factory()->create();
 
