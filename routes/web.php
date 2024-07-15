@@ -1,13 +1,19 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get( '/', function () {
+    return view( 'welcome' );
+} );
 
-Route::get('/403', function () {
-   abort_if(true, 403);
+Route::get( '/403', function () {
+    abort_if( true, 403 );
 
-   return ['oi'];
-});
+    return ['oi'];
+} );
+
+Route::get( '/products', function () {
+    $products = Product::all();
+    return view( 'products', compact( 'products' ) );
+} );
