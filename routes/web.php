@@ -27,3 +27,12 @@ Route::post( '/products', function () {
 
     return response()->json('',201);
 } )->name('product.store');
+
+Route::put( '/products/{product}', function (Product $product) {
+    $data = request()->all();
+
+    $product->title =$data['title'];
+    $product->save();
+
+    return response()->json('',200);
+} )->name('product.update');
