@@ -2,6 +2,7 @@
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\assertDatabaseMissing;
 use function Pest\Laravel\postJson;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
@@ -55,4 +56,14 @@ it( 'should be able to update a product', function () {
 
 } );
 
-it( 'should be able to delete a product', function () {} )->todo();
+it( 'should be able to delete a product', function () {
+    $product = \App\Models\Product::factory()->create();
+
+    \Pest\Laravel\delete(route('product.destroy', $product))
+    ->assertOk();
+
+    assertDatabaseCount('products', 0);
+    assertDatabaseMissing('products', [
+        'id' => $product->id,
+    ]);
+} );
