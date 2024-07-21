@@ -67,3 +67,15 @@ it( 'should be able to delete a product', function () {
         'id' => $product->id,
     ]);
 } );
+
+it( 'should be able to soft-delete a product', function () {
+    $product = \App\Models\Product::factory()->create();
+
+    \Pest\Laravel\delete(route('product.soft-delete', $product))
+        ->assertOk();
+
+    assertDatabaseCount('products', 1);
+    \Pest\Laravel\assertSoftDeleted('products', [
+        'id' => $product->id,
+    ]);
+} );

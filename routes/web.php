@@ -38,6 +38,11 @@ Route::put( '/products/{product}', function (Product $product) {
 } )->name('product.update');
 
 Route::delete( '/products/{product}', function (Product $product) {
-    $product->delete();
+    $product->forceDelete();
     return response()->json('',200);
 } )->name('product.destroy');
+
+Route::delete( '/products/soft-delete/{product}', function (Product $product) {
+    $product->delete();
+    return response()->json('',200);
+} )->name('product.soft-delete');
