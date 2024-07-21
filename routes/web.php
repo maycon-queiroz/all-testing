@@ -17,3 +17,13 @@ Route::get( '/products', function () {
     $products = Product::all();
     return view( 'products', compact( 'products' ) );
 } );
+
+Route::post( '/products', function () {
+    $data = request()->all();
+    $products = new Product();
+    $products->title =$data['title'];
+    $products->price =$data['price'];
+    $products->save();
+
+    return response()->json('',201);
+} )->name('product.store');
