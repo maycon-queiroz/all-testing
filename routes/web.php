@@ -19,9 +19,10 @@ Route::get( '/products', function () {
 } );
 
 Route::post( '/products', function () {
+    request()->validate(['title'=> ['required', 'string', 'max:255']]);
     $data = request()->all();
     $products = new Product();
-    $products->title =$data['title'];
+    $products->title = $data['title'];
     $products->price =$data['price'];
     $products->save();
 
