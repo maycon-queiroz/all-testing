@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\WelcomeEmail;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get( '/', function () {
@@ -47,3 +49,7 @@ Route::delete( '/products/soft-delete/{product}', function (Product $product) {
     $product->delete();
     return response()->json('',200);
 } )->name('product.soft-delete');
+
+Route::post('send-email', function (User $user){
+    Mail::to($user)->send(new WelcomeEmail());
+})->name('sending-email');
