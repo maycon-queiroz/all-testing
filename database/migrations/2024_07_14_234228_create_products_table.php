@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->integer('price');
+            $table->string('code')->nullable();
+            $table->boolean('released')->default(false);
+
             $table->foreignIdFor(\App\Models\User::class, 'owner_id');
             $table->softDeletes();
             $table->timestamps();

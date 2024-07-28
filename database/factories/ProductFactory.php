@@ -19,7 +19,8 @@ class ProductFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'price' => $this->faker->numberBetween(1000, 999999),
-            'owner_id' => null,
+            'owner_id' => UserFactory::new(),
+            'code' => $this->faker->word(),
         ];
     }
 }
