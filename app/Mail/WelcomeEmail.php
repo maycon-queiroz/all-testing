@@ -17,7 +17,7 @@ class WelcomeEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private readonly User $user)
+    public function __construct(public readonly User $user)
     {
         //
     }
