@@ -31,6 +31,13 @@ test( 'an email was sent to user::x', function () {
 
 } );
 
-test('an email was sent with a subject', function(){
+test('email subject should  contain the user name', function(){
+    Mail::fake();
 
+    $user = User::factory()->create();
+
+   $email = new WelcomeEmail($user);
+
+   expect($email)
+       ->assertHasSubject("thank you for signing up {$user->name}");
 });
