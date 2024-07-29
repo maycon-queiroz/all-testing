@@ -50,6 +50,6 @@ Route::delete( '/products/soft-delete/{product}', function (Product $product) {
     return response()->json('',200);
 } )->name('product.soft-delete');
 
-Route::post('send-email', function (User $user){
-    Mail::to($user)->send(new WelcomeEmail());
+Route::post('send-email/{user}', function (User $user){
+    Mail::to($user)->send(new WelcomeEmail($user));
 })->name('sending-email');
