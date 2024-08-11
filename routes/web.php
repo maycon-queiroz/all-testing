@@ -53,3 +53,9 @@ Route::delete( '/products/soft-delete/{product}', function (Product $product) {
 Route::post('send-email/{user}', function (User $user){
     Mail::to($user)->send(new WelcomeEmail($user));
 })->name('sending-email');
+
+Route::post('import-products', function (){
+$data = request()->get('data');
+
+dispatch(new \App\Jobs\ImportProductJob($data));
+})->name('product.import');
