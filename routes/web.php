@@ -22,10 +22,12 @@ Route::get( '/products', function () {
 
 Route::post( '/products', function () {
     request()->validate( ['title' => ['required', 'string', 'max:255']] );
+    $user = auth()->user();
     $data = request()->all();
     $products = new Product();
     $products->title = $data['title'];
     $products->price = $data['price'];
+    $products->owner_id = $user->id;
     $products->save();
 
     return response()->json( '', 201 );

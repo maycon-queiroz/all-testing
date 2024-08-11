@@ -9,12 +9,12 @@ use function PHPUnit\Framework\assertTrue;
 
 it( 'should be able to create a product', function () {
     $user = \App\Models\User::factory()->create();
+    \Pest\Laravel\actingAs($user);
     postJson(
         route( 'product.store' ),
         [
             'title' => 'Test product',
             'price' => 20,
-            'owner_id'=>$user->id
         ] )
         ->assertCreated();
 
