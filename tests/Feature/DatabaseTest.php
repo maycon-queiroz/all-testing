@@ -8,11 +8,13 @@ use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
 it( 'should be able to create a product', function () {
+    $user = \App\Models\User::factory()->create();
     postJson(
         route( 'product.store' ),
         [
             'title' => 'Test product',
-            'price' => 20
+            'price' => 20,
+            'owner_id'=>$user->id
         ] )
         ->assertCreated();
 
@@ -30,10 +32,12 @@ it( 'should be able to create a product', function () {
 } );
 
 it( 'should be able to update a product', function () {
+    $user = \App\Models\User::factory()->create();
 
     $product = \App\Models\Product::factory()->create([
         'title' => 'Test product',
-        'price' => 20
+        'price' => 20,
+        'owner_id'=>$user->id
         ]);
 
     \Pest\Laravel\putJson(route('product.update', $product),[

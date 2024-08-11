@@ -21,41 +21,42 @@ Route::get( '/products', function () {
 } );
 
 Route::post( '/products', function () {
-    request()->validate(['title'=> ['required', 'string', 'max:255']]);
+    request()->validate( ['title' => ['required', 'string', 'max:255']] );
     $data = request()->all();
     $products = new Product();
     $products->title = $data['title'];
-    $products->price =$data['price'];
+    $products->price = $data['price'];
     $products->save();
 
-    return response()->json('',201);
-} )->name('product.store');
+    return response()->json( '', 201 );
+} )->name( 'product.store' );
 
 Route::put( '/products/{product}', function (Product $product) {
     $data = request()->all();
 
-    $product->title =$data['title'];
+    $product->title = $data['title'];
     $product->save();
 
-    return response()->json('',200);
-} )->name('product.update');
+    return response()->json( '', 200 );
+} )->name( 'product.update' );
 
 Route::delete( '/products/{product}', function (Product $product) {
     $product->forceDelete();
-    return response()->json('',200);
-} )->name('product.destroy');
+    return response()->json( '', 200 );
+} )->name( 'product.destroy' );
 
 Route::delete( '/products/soft-delete/{product}', function (Product $product) {
     $product->delete();
-    return response()->json('',200);
-} )->name('product.soft-delete');
+    return response()->json( '', 200 );
+} )->name( 'product.soft-delete' );
 
-Route::post('send-email/{user}', function (User $user){
-    Mail::to($user)->send(new WelcomeEmail($user));
-})->name('sending-email');
+Route::post( 'send-email/{user}', function (User $user) {
+    Mail::to( $user )->send( new WelcomeEmail( $user ) );
+} )->name( 'sending-email' );
 
-Route::post('import-products', function (){
-$data = request()->get('data');
+Route::post( 'import-products', function () {
+    $data = request()->get( 'data' );
 
-dispatch(new \App\Jobs\ImportProductJob($data));
-})->name('product.import');
+    $user = auth()->user();
+    \App\Jobs\ImportProductJob::dispatch( $data ,$user->id);
+} )->name( 'product.import' );

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,7 +16,10 @@ class ImportProductJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(
+        protected readonly array $data,
+        protected readonly int $owner_id
+    )
     {
         //
     }
@@ -25,6 +29,9 @@ class ImportProductJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        foreach ($this->data as $data) {
+            $data['owner_id'] = $this->owner_id;
+            Product::query()->create($data);
+        }
     }
 }
