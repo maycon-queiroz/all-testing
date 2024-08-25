@@ -65,6 +65,6 @@ Route::post( 'import-products', function () {
     \App\Jobs\ImportProductJob::dispatch( $data ,$user->id);
 } )->name( 'product.import' );
 
-Route::middleware(MayconMiddleware::class)
-    ->post( 'secure-user', fn ()=>['oi'])
+Route::post( 'secure-user', fn ()=>['oi'])
+    ->middleware(MayconMiddleware::class)
     ->name( 'secure-route' );

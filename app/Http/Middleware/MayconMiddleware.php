@@ -17,7 +17,7 @@ class MayconMiddleware
     {
         $user = $request->user();
         abort_unless(
-            $user->email === 'maycon@maycon.com',
+            $user?->email === 'maycon@maycon.com',
             Response::HTTP_FORBIDDEN
         );
 
