@@ -30,6 +30,8 @@ Route::post( '/products', function () {
     $products->owner_id = $user->id;
     $products->save();
 
+    auth()->user()->notify(new \App\Notifications\NewProductionNotification());
+
     return response()->json( '', 201 );
 } )->name( 'product.store' );
 
