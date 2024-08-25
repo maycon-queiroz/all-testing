@@ -78,3 +78,39 @@ Route::post('upload-avatar', function (){
     );
 })
 ->name('upload-avatar');
+
+Route::post( 'upload-import-csv', function (){
+    $file = request()->file('file');
+
+    if (!$file->isValid()) {
+        Log::error('Arquivo inválido.');
+        return;
+    }
+
+    $filePath = $file->getRealPath();
+    $fileHandle = fopen($filePath, 'r');
+
+    if ($fileHandle === false) {
+        Log::error('Erro ao abrir o arquivo CSV.');
+        return;
+    }
+
+    DB::beginTransaction();
+
+    try {
+        while (($data = fgetcsv($fileHandle, 1000, ',')) !== false) {
+            Product::query()->create([
+                'title' => $data[0],
+                'price' => $data[1],
+                'owner_id' => $data[2],
+            ]);
+        }
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Erro ao processar o arquivo CSV: ' . $e->getMessage());
+    } finally {
+        fclose($fileHandle);
+    }
+})
+    ->name( 'upload-import-csv' );
