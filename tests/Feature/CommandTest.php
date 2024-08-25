@@ -25,8 +25,20 @@ it( 'should be able create a product from command', function () {
     assertDatabaseHas( 'products', [
         'title'    => 'Test product',
         'price'    => 20,
+        'owner_id' => $user->id
     ] );
 
     Notification::assertCount(1);
     Notification::assertSentTo([$user], NewProductionNotification::class);
 } );
+
+it( 'should asks for user and title if not provide as arguments', function () {
+    $user = User::factory()->create();
+
+    artisan(CreateProductCommand::class, [])
+        ->expectsQuestion('Please, provide a valid user id', $user->id)
+        ->expectsQuestion('Please, provide a valid title', 'Product title 1')
+        ->expectsQuestion('Please, provide a valid price', 20)
+        ->expectsOutputToContain('Product created successfully')
+        ->assertSuccessful();
+});

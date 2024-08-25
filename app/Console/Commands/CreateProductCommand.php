@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\CreateProductAction;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -13,7 +13,7 @@ class CreateProductCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:create-product-command {title} {price} {owner}';
+    protected $signature = 'app:create-product-command {title?} {price?} {owner?}';
 
     /**
      * The console command description.
@@ -28,15 +28,29 @@ class CreateProductCommand extends Command
      */
     public function handle(): void
     {
-        $data = [
-            'title' => $this->argument( 'title' ),
-            'price' => $this->argument( 'price' ),
-        ];
-
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->argument( 'owner' );
+        $title = $this->argument( 'title' );
+        $price = $this->argument( 'price' );
 
-        $action = app( CreateProductAction::class );
-        $action->handle( $data, $user );
+        if (!$user) {
+            $user = $this->components->ask( 'Please, provide a valid user id' );
+        }
+        if (!$title) {
+            $title = $this->components->ask( 'Please, provide a valid title' );
+        }
+        if (!$price) {
+            $price = $this->components->ask( 'Please, provide a valid price' );
+        }
+
+        Product::query()
+        ->create([
+            'title' => $title,
+            'price' => $price,
+            'owner_id' => $user
+        ]);
+
+
+        $this->components->info( 'Product created successfully' );
     }
 }
