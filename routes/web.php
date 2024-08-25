@@ -3,6 +3,7 @@
 use App\Mail\WelcomeEmail;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\NewProductionNotification;
 use Illuminate\Support\Facades\Route;
 
 Route::get( '/', function () {
@@ -22,15 +23,16 @@ Route::get( '/products', function () {
 
 Route::post( '/products', function () {
     request()->validate( ['title' => ['required', 'string', 'max:255']] );
-    $user = auth()->user();
-    $data = request()->all();
-    $products = new Product();
-    $products->title = $data['title'];
-    $products->price = $data['price'];
-    $products->owner_id = $user->id;
-    $products->save();
 
-    auth()->user()->notify(new \App\Notifications\NewProductionNotification());
+    $user = auth()->user();
+
+    $data = request()->all();
+
+
+    $action = app(\App\Actions\CreateProductAction::class);
+    $action->handle($data,$user);
+
+
 
     return response()->json( '', 201 );
 } )->name( 'product.store' );

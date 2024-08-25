@@ -1,17 +1,20 @@
 <?php
 
+use App\Models\User;
 use App\Notifications\NewProductionNotification;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\postJson;
 
 
 it( 'should sends a notification about a new product', function () {
     Notification::fake();
 
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
 
-    \Pest\Laravel\actingAs( $user );
+    actingAs( $user );
 
-    \Pest\Laravel\postJson(
+    postJson(
         route( 'product.store', [
                 'title'    => 'Test product',
                 'price'    => 20,
