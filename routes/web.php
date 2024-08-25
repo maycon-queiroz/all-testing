@@ -1,9 +1,9 @@
 <?php
 
+use App\Actions\CreateProductAction;
 use App\Mail\WelcomeEmail;
 use App\Models\Product;
 use App\Models\User;
-use App\Notifications\NewProductionNotification;
 use Illuminate\Support\Facades\Route;
 
 Route::get( '/', function () {
@@ -28,8 +28,7 @@ Route::post( '/products', function () {
 
     $data = request()->all();
 
-
-    $action = app(\App\Actions\CreateProductAction::class);
+    $action = app( CreateProductAction::class);
     $action->handle($data,$user);
 
 
