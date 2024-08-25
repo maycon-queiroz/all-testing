@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\CreateProductAction;
+use App\Http\Middleware\MayconMiddleware;
 use App\Mail\WelcomeEmail;
 use App\Models\Product;
 use App\Models\User;
@@ -30,8 +31,6 @@ Route::post( '/products', function () {
 
     $action = app( CreateProductAction::class);
     $action->handle($data,$user);
-
-
 
     return response()->json( '', 201 );
 } )->name( 'product.store' );
@@ -65,3 +64,7 @@ Route::post( 'import-products', function () {
     $user = auth()->user();
     \App\Jobs\ImportProductJob::dispatch( $data ,$user->id);
 } )->name( 'product.import' );
+
+Route::middleware(MayconMiddleware::class)
+    ->post( 'secure-user', fn ()=>['oi'])
+    ->name( 'secure-route' );
